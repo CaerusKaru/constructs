@@ -7,9 +7,14 @@ import {FederatedPrincipal, PolicyStatement, Role} from '@aws-cdk/aws-iam';
 import {Construct, Fn, Token} from '@aws-cdk/cdk';
 import {CfnIdentityPool, CfnIdentityPoolRoleAttachment} from '@aws-cdk/aws-cognito';
 import {CfnBasePathMapping, CfnDomainName, CfnDomainNameProps, EndpointType} from '@aws-cdk/aws-apigateway';
+import {StaticWebsite, StaticWebsiteProps} from '@constructs/static-website';
 
-import {ACMDNSCert} from './static_website/acm_dns_cert';
-import {StaticWebsite} from '../static-website/src';
+export interface ServerlessWebAppProps {
+  apiGateway: unknown;
+  dns: unknown;
+  identityProvider: unknown;
+  cloudFront: unknown;
+}
 
 
 export class ServerlessWebapp extends Construct {
@@ -18,7 +23,7 @@ export class ServerlessWebapp extends Construct {
   readonly cognitoAuthenticatedRole: Role;
   readonly cognitoPool: CfnIdentityPool;
 
-  constructor(parent: Construct, name: string, props: IServerlessWebAppProps) {
+  constructor(parent: Construct, name: string, props: ServerlessWebAppProps) {
     super(parent, name);
 
     this.apiId = props.apiGateway.ref;
@@ -144,7 +149,7 @@ export class ServerlessWebapp extends Construct {
       region: stack.region
     };
 
-    const staticWebProps: IStaticWebsiteProps = {
+    const staticWebProps: StaticWebsiteProps = {
       website: props.cloudFront
     };
 

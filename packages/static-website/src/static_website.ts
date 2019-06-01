@@ -9,7 +9,7 @@ import {Bucket} from '@aws-cdk/aws-s3';
 
 import {StaticWebsiteBucket} from './bucket';
 import {StaticWebsiteCloudFront, StaticWebsiteCloudFrontProps} from './cloud_front';
-import {ArtifactCopyConfiguration} from '../../artifacts/artifact_copy_configuration';
+import {ArtifactCopyConfiguration} from '../../artifacts/src/artifact_copy_configuration';
 
 
 /**

@@ -7,8 +7,7 @@ import {Bucket} from '@aws-cdk/aws-s3';
 import {AccountRootPrincipal, PolicyStatement} from '@aws-cdk/aws-iam';
 import {CfnRecordSet} from '@aws-cdk/aws-route53';
 import {BucketDeployment, Source} from '@aws-cdk/aws-s3-deployment';
-
-import {ArtifactCopyConfiguration} from '../../artifacts/artifact_copy_configuration';
+import {ArtifactCopyConfiguration} from '@constructs/artifacts';
 
 
 /** @internal */

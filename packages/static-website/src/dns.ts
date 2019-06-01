@@ -4,7 +4,6 @@
  */
 import {Construct} from '@aws-cdk/cdk';
 import {AliasConfiguration} from '@aws-cdk/aws-cloudfront';
-
 import {DnsValidatedCertificate} from '@aws-cdk/aws-certificatemanager';
 import {HostedZoneProvider} from '@aws-cdk/aws-route53';
 
@@ -18,6 +17,7 @@ export interface StaticWebsiteCloudFrontDNSProps {
 /** @internal */
 export class StaticWebsiteCloudFrontDNS extends Construct {
   readonly aliasConfiguration: AliasConfiguration;
+  readonly hostedZoneId: string;
 
   constructor(scope: Construct, id: string, props: StaticWebsiteCloudFrontDNSProps) {
     super(scope, id);
@@ -29,6 +29,8 @@ export class StaticWebsiteCloudFrontDNS extends Construct {
       domainName: hostedZoneName,
       privateZone: false
     }).findAndImport(this, 'HostedZone');
+
+    this.hostedZoneId = hostedZone.hostedZoneId;
 
     const certificate = new DnsValidatedCertificate(this, 'WebsiteCert', {
       hostedZone,

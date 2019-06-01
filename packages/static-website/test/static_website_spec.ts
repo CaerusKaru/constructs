@@ -1,6 +1,7 @@
 import {App, Stack} from '@aws-cdk/cdk';
 import {haveResourceLike, ResourcePart, expect} from '@aws-cdk/assert';
-import {StaticWebsite, CodeBuildWebsiteArtifactConfiguration} from '@amzn/static-website';
+import {CodeBuildWebsiteArtifactConfiguration} from '@constructs/artifacts';
+import {StaticWebsite} from '@constructs/static-website';
 
 
 describe('a CodeBuild website', () => {

@@ -6,19 +6,14 @@ load("@npm_bazel_typescript//:index.bzl", _ts_library = "ts_library")
 
 _DEFAULT_TSCONFIG_TEST = "//packages:tsconfig-test"
 
-# Packages which are versioned together on npm
-TOOLKIT_SCOPED_PACKAGES = ["@amzn/%s" % p for p in [
-    "toolkit",
-]]
-
-CDK_PACKAGE_VERSION = "0.31.0"
+CDK_PACKAGE_VERSION = "0.33.0"
 VERSION_PLACEHOLDER_REPLACEMENTS = {
-  "0.0.0-CDK": CDK_PACKAGE_VERSION
+    "0.0.0-CDK": CDK_PACKAGE_VERSION,
 }
 
 def _default_module_name(testonly):
     """ Provide better defaults for package names.
-    e.g. rather than toolkit/packages/core/testing we want @amzn/core/testing
+    e.g. rather than constructs/packages/core/testing we want @constructs/core/testing
     TODO: we ought to supply a default module name for every library in the repo.
     But we short-circuit below in cases that are currently not working.
     """
@@ -29,7 +24,7 @@ def _default_module_name(testonly):
         return None
 
     if pkg.startswith("packages/"):
-        return "@amzn/" + pkg[len("packages/"):]
+        return "@constructs/" + pkg[len("packages/"):]
 
     return None
 

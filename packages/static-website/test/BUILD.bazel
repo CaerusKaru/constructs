@@ -9,19 +9,20 @@ ts_library(
     # Visible to //:test_web_all target
     visibility = ["//:__pkg__"],
     deps = [
+        "//packages/artifacts",
         "//packages/static-website",
         "@npm//@aws-cdk/assert",
-        "@npm//@aws-cdk/cdk"
+        "@npm//@aws-cdk/cdk",
     ],
 )
 
 jasmine_node_test(
     name = "test",
     bootstrap = [],
+    data = [
+        "//packages/static-website:website_assets",
+    ],
     deps = [
         ":test_lib",
     ],
-    data = [
-        "//packages/static-website:website_assets",
-    ]
 )

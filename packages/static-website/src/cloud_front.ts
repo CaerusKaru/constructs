@@ -4,7 +4,6 @@
  */
 import {Bucket} from '@aws-cdk/aws-s3';
 import {
-  AliasConfiguration,
   Behavior,
   CfnCloudFrontOriginAccessIdentity,
   CfnDistribution,
@@ -68,8 +67,7 @@ export class StaticWebsiteCloudFront extends CloudFrontWebDistribution {
       }
     });
 
-    const s3UserId = scope.node
-      .resolve(originAccessIdentity.getAtt('S3CanonicalUserId'));
+    const s3UserId = originAccessIdentity.cloudFrontOriginAccessIdentityS3CanonicalUserId;
 
     props.bucket.addToResourcePolicy(
       new PolicyStatement()
@@ -109,7 +107,7 @@ export class StaticWebsiteCloudFront extends CloudFrontWebDistribution {
         let fixedConfig = {...config};
         if (!fixedConfig.s3OriginSource && !fixedConfig.customOriginSource) {
           fixedConfig.s3OriginSource = {
-            originAccessIdentity,
+            originAccessIdentityId: originAccessIdentity.cloudFrontOriginAccessIdentityId,
             s3BucketSource: props.bucket,
           };
           fixedConfig.originPath = props.destPath + config.originPath;
@@ -120,7 +118,7 @@ export class StaticWebsiteCloudFront extends CloudFrontWebDistribution {
     originConfigs.push(
       {
         s3OriginSource: {
-          originAccessIdentity,
+          originAccessIdentityId: originAccessIdentity.cloudFrontOriginAccessIdentityId,
           s3BucketSource: props.bucket,
         },
         behaviors: props.behaviors ? props.behaviors : [
@@ -147,19 +145,16 @@ export class StaticWebsiteCloudFront extends CloudFrontWebDistribution {
       errorConfigurations,
     };
 
-    let aliasConfiguration: AliasConfiguration | undefined = undefined;
     if (props.dns) {
       const dns = new StaticWebsiteCloudFrontDNS(scope, 'DNS', props.dns);
-      aliasConfiguration = dns.aliasConfiguration;
-    }
+      const aliasConfiguration = dns.aliasConfiguration;
 
-    super(scope, id, {...defaultProps, aliasConfiguration});
+      super(scope, id, {...defaultProps, aliasConfiguration});
 
-    if (props.dns) {
       const route53CommonProps = {
         aliasTarget: {
           dnsName: this.domainName,
-          hostedZoneId: this.aliasHostedZoneId,
+          hostedZoneId: dns.hostedZoneId,
         },
         hostedZoneName: Fn.sub('${HZName}.', {HZName: props.dns.hostedZoneName}),
         name: props.dns.recordName ?
@@ -173,6 +168,8 @@ export class StaticWebsiteCloudFront extends CloudFrontWebDistribution {
         ...route53CommonProps,
         type: 'AAAA'
       });
+    } else {
+      super(scope, id, defaultProps);
     }
 
     if (props.invalidationPaths) {

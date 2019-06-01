@@ -12,7 +12,7 @@
     "noImplicitAny": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@amzn/*": ["./*"]
+      "@constructs/*": ["./*"]
     },
     "rootDir": ".",
     "inlineSourceMap": true,

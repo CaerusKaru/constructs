@@ -2,10 +2,10 @@
  * @license
  * Copyright Amazon LLC. All Rights Reserved.
  */
-import {CfnFlowLog, DefaultInstanceTenancy, VpcNetwork} from '@aws-cdk/aws-ec2';
+import {CfnFlowLog, DefaultInstanceTenancy, Vpc as CdkVpc} from '@aws-cdk/aws-ec2';
 import {Construct} from '@aws-cdk/cdk';
 import {PolicyStatement, Role, ServicePrincipal} from '@aws-cdk/aws-iam';
-import {CloudTrail} from '@aws-cdk/aws-cloudtrail';
+import {Trail} from '@aws-cdk/aws-cloudtrail';
 
 export interface VpcProps {
   maxAZs?: number;
@@ -13,7 +13,7 @@ export interface VpcProps {
   enableCloudTrail?: boolean;
 }
 
-export class Vpc extends VpcNetwork {
+export class Vpc extends CdkVpc {
   constructor(scope: Construct, id: string, props?: VpcProps) {
     super(scope, id, {
       cidr: '10.0.0.0/16',
@@ -43,7 +43,7 @@ export class Vpc extends VpcNetwork {
     }
 
     if (props && props.enableCloudTrail) {
-      new CloudTrail(this, 'CloudTrail');
+      new Trail(this, 'CloudTrail');
     }
   }
 }

@@ -15,8 +15,8 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # Fetch rules_nodejs so we can install our npm dependencies
 http_archive(
     name = "build_bazel_rules_nodejs",
-    sha256 = "1db950bbd27fb2581866e307c0130983471d4c3cd49c46063a2503ca7b6770a4",
-    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/0.29.0/rules_nodejs-0.29.0.tar.gz"],
+    sha256 = "bc180118b9e1c7f2b74dc76a8f798d706fe9fc53470ef9296728267b4cd29441",
+    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/0.30.2/rules_nodejs-0.30.2.tar.gz"],
 )
 
 # Check the bazel version and download npm dependencies
@@ -28,7 +28,7 @@ load("@build_bazel_rules_nodejs//:defs.bzl", "check_bazel_version", "check_rules
 check_bazel_version(
     message = """
 You no longer need to install Bazel on your machine.
-Angular has a dependency on the @bazel/bazel package which supplies it.
+Constructs has a dependency on the @bazel/bazel package which supplies it.
 Try running `yarn bazel` instead.
     (If you did run that, check that you've got a fresh `yarn install`)
 """,
@@ -41,7 +41,7 @@ Try running `yarn bazel` instead.
 #   - 0.16.8 Supports npm installed bazel workspaces
 #   - 0.26.0 Fix for data files in yarn_install and npm_install
 #   - 0.27.12 Adds NodeModuleSources provider for transtive npm deps support
-check_rules_nodejs_version("0.27.12")
+check_rules_nodejs_version(minimum_version_string = "0.27.12")
 
 # Setup the Node.js toolchain
 node_repositories(
@@ -56,16 +56,16 @@ node_repositories(
     # It possible that versions of yarn past 1.13.0 do not have this issue, however, before
     # advancing this version we need to test manually on Windows that the above error does not
     # happen as the issue is not caught by CI.
-    yarn_version = "1.12.1",
+    yarn_version = "1.16.0",
 )
 
 npm_install(
     name = "npm",
     data = [],
     package_json = "//:package.json",
+    package_lock_json = "//:package-lock.json",
     # Don't install devDependencies, they are large and not used under Bazel
     prod_only = True,
-    package_lock_json = "//:package-lock.json",
 )
 
 # Install all bazel dependencies of the @npm npm packages

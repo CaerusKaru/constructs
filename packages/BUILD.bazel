@@ -10,7 +10,7 @@ load("//tools:defaults.bzl", "ts_library")
 
 ts_library(
     name = "types",
-    srcs = glob(["*.ts"])
+    srcs = glob(["*.ts"]),
 )
 
 ts_config(
