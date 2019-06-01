@@ -23,10 +23,9 @@ npm_package(
     name = "npm_package",
     srcs = [
         "package.json",
-        ":website_assets",
     ],
     tags = [
-        "release-with-framework",
+        # "release-with-framework",
     ],
     deps = [
         ":serverless-webapp",

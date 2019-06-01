@@ -56,7 +56,7 @@ node_repositories(
     # It possible that versions of yarn past 1.13.0 do not have this issue, however, before
     # advancing this version we need to test manually on Windows that the above error does not
     # happen as the issue is not caught by CI.
-    yarn_version = "1.16.0",
+    yarn_version = "1.12.1",
 )
 
 npm_install(

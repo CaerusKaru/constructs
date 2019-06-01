@@ -23,7 +23,7 @@ npm_package(
         "package.json",
     ],
     tags = [
-        "release-with-framework",
+        # "release-with-framework",
     ],
     deps = [
         ":vpc",
