@@ -1,0 +1,44 @@
+load("//tools:defaults.bzl", "ts_library", "npm_package")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_library(
+    name = "static-website",
+    srcs = glob(["*.ts", "src/**/*.ts"]),
+    node_modules = "@npm//typescript:typescript__typings",
+    deps = [
+        "@npm//@types/node",
+        "@npm//@aws-cdk/aws-apigateway",
+        "@npm//@aws-cdk/aws-cloudfront",
+        "@npm//@aws-cdk/aws-cloudformation",
+        "@npm//@aws-cdk/aws-cloudtrail",
+        "@npm//@aws-cdk/aws-cognito",
+        "@npm//@aws-cdk/aws-ec2",
+        "@npm//@aws-cdk/aws-iam",
+        "@npm//@aws-cdk/aws-lambda",
+        "@npm//@aws-cdk/aws-route53",
+        "@npm//@aws-cdk/aws-s3",
+        "@npm//@aws-cdk/aws-s3-deployment",
+        "@npm//@aws-cdk/aws-sam",
+        "@npm//@aws-cdk/cdk",
+    ],
+)
+
+filegroup(
+  name = "website_assets",
+  srcs = glob(["**/*.py"]),
+)
+
+npm_package(
+    name = "npm_package",
+    srcs = [
+      "package.json",
+      ":website_assets",
+    ],
+    tags = [
+        "release-with-framework",
+    ],
+    deps = [
+        ":static-website",
+    ],
+)

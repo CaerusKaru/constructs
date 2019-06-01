@@ -1,0 +1,27 @@
+load("//tools:defaults.bzl", "jasmine_node_test", "ts_library")
+
+ts_library(
+    name = "test_lib",
+    testonly = True,
+    srcs = glob(
+        ["**/*.ts"],
+    ),
+    # Visible to //:test_web_all target
+    visibility = ["//:__pkg__"],
+    deps = [
+        "//packages/static-website",
+        "@npm//@aws-cdk/assert",
+        "@npm//@aws-cdk/cdk"
+    ],
+)
+
+jasmine_node_test(
+    name = "test",
+    bootstrap = [],
+    deps = [
+        ":test_lib",
+    ],
+    data = [
+        "//packages/static-website:website_assets",
+    ]
+)
